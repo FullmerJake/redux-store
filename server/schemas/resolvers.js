@@ -2,7 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Category, Order } = require('../models');
 const { signToken } = require('../utils/auth');
 require('dotenv').config();
-const stripe = require('stripe')(process.env.STRIPE_TEST_KEY);
+const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
   Query: {
@@ -54,31 +54,36 @@ const resolvers = {
       throw new AuthenticationError('Not logged in');
     },
     checkout: async (parent, args, context) => {
+      //make new url to redirect after success purchase
+      // console.log(context.headers);
       const url = new URL(context.headers.referer).origin;
       console.log(url);
 
-      const order = new Order
+      const order = new Order//sending product ObjectID's in args.products
       (
         {
           products: args.products
         }
       );
       console.log(order);
- 
+      //not actually storing the order in the DB just using it as a way to
+      // separate a product model from an order model
       const { products } = await order.populate('products').execPopulate();
       console.log(products);
       
       const line_items = [];
       for (let i = 0; i < products.length; i++) {
-     
+        //gen a product id
         const product = await stripe.products.create(
           {
             name: products[i].name,
             description: products[i].description,
             images: [`${url}/images/${products[i].image}`]
+            // images: [`https://picsum.photos/280/320?random=4`]
           }
         );
 
+        //gen price id using the product id 
         const price = await stripe.prices.create(
           {
             product: product.id,
@@ -87,6 +92,7 @@ const resolvers = {
           }
         );
 
+        //add price id to the line items array
         line_items.push(
           {
             price: price.id,
@@ -94,12 +100,15 @@ const resolvers = {
           }
         );
       }
+      //console.log(line_items);
 
       const session = await stripe.checkout.sessions.create(
         {
           payment_method_types: ['card'],
           line_items,
           mode: 'payment',
+          // success_url: `https://example.com/success?session_id={CHECKOUT_SESSION_ID}`,
+          // cancel_url: `https://example.com/cancel`
           success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${url}/`
         }

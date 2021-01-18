@@ -1,13 +1,13 @@
 const commerceReducer = (
-  state = {//initial commerceReducer redux state
+  state = {
     products: [],
     cart: [],
     cartOpen: false,
     categories: [],
     currentCategory: '',
-}, action) => //ACTION TO DISPATCH BY DISPATCHER FUNCTION
+}, action) => 
 {
-  switch(action.type) {//9 actions
+  switch(action.type) {
     case 'UPDATE_PRODUCTS':
       return {
         ...state,
