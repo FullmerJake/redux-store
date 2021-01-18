@@ -29,6 +29,9 @@
 
   ## Tests
   See Images
+  ![Image1](./Shop-Image1.png)
+  ![Image2](./Shop-Image2.png)
+  ![Image3](./Shop-Image3.png)
   
   ## Contact
   Learn more about the owner of this project by visiting their Github Profile: <a href=https://github.com/FullmerJake>FullmerJake</a>
