@@ -19,32 +19,44 @@ function OrderHistory() {
           ← Back to Products
           </Link>
 
-        {user ? (
-          <>
-            <h2>Order History for {user.firstName} {user.lastName}</h2>
-            {user.orders.map((order) => (
-              <div key={order._id} className="my-2">
-                <h3>{new Date(parseInt(order.purchaseDate)).toLocaleDateString()}</h3>
-                <div className="flex-row">
-                  {order.products.map(({ _id, image, name, price }, index) => (
-                    <div key={index} className="card px-1 py-1">
-                      <Link to={`/products/${_id}`}>
-                        <img
-                          alt={name}
-                          src={`/images/${image}`}
-                        />
-                        <p>{name}</p>
-                      </Link>
-                      <div>
-                        <span>${price}</span>
-                      </div>
+        {
+          user 
+          ? 
+          (
+            <>
+              <h2>Order History for {user.firstName} {user.lastName}</h2>
+              {
+                user.orders.map((order) => (
+                  <div key={order._id} className="my-2">
+                    <h3>{new Date(parseInt(order.purchaseDate)).toLocaleDateString()}</h3>
+                    <div className="flex-row">
+                      {
+                        order.products.map(({ _id, image, name, price, quantity }, index) => 
+                        (
+                          <div key={index} className="card px-1 py-1">
+                            <Link to={`/products/${_id}`}>
+                              <img
+                                alt={name}
+                                src={`/images/${image}`}
+                              />
+                              <p>{name}</p>
+                            </Link>
+                            <div>
+                              <span>${price}</span>
+                              {' '}
+                              <span>amount purchased: {quantity}</span>
+                            </div>
+                          </div>
+                        ))
+                      }
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </>
-        ) : null}
+                  </div>
+                ))
+              }
+            </>
+          ) 
+          : null
+        }
 
       </div>
 

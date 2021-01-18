@@ -2,7 +2,20 @@ import React from "react";
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
 
+//REDUX IMPORTS
+import { useDispatch } from 'react-redux';
+//REDUX ACTIONS
+import {
+  updateCurrentCategory
+} from '../../actions';
 function Nav() {
+
+  const dispatchREDUX = useDispatch();
+
+  const setCurrentCategoryBlank = () => {
+
+    dispatchREDUX(updateCurrentCategory(''));
+  }
 
   function showNavigation() {
     if (Auth.loggedIn()) {
@@ -42,8 +55,16 @@ function Nav() {
   return (
     <header className="flex-row px-1">
       <h1>
-        <Link to="/">
-          <span role="img" aria-label="shopping bag">🛍️</span>
+        <Link 
+          onClick={setCurrentCategoryBlank}
+          to="/"
+        >
+          <span 
+            role="img" 
+            aria-label="shopping bag"
+          >
+            🛍️
+          </span>
           -Shop-Shop
         </Link>
       </h1>

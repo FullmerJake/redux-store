@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useQuery } from '@apollo/react-hooks';
 import { idbPromise } from '../../utils/helpers.js';
+
 import ProductItem from "../ProductItem";
 import { QUERY_PRODUCTS } from "../../utils/queries";
 import spinner from "../../assets/spinner.gif"
@@ -16,11 +17,9 @@ function ProductList() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  
   const commerceState = useSelector(state => state.commerce);
-
+ 
   const dispatchREDUX = useDispatch();
-
 
   const {
     products,
@@ -28,19 +27,19 @@ function ProductList() {
  
   } = commerceState;
 
+
   
   useEffect(() => {
- 
+
     if (data) {
 
       dispatchREDUX(updateProducts(data.products));
-   
+      
       data.products.forEach(product => {
         idbPromise('products', 'put', product);
       });
 
     } else if (!loading) {
-
       idbPromise('products', 'get')
       .then
       (

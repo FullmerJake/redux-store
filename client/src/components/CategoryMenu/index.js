@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { QUERY_CATEGORIES } from "../../utils/queries";
 import { idbPromise } from '../../utils/helpers.js';
 
+//REDUX IMPORTS 
 import {
   updateCategories, updateCurrentCategory
 } from '../../actions';
@@ -10,7 +11,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 
 function CategoryMenu() {
+
   const commerceState = useSelector(state => state.commerce);
+ 
   const dispatchREDUX = useDispatch();
 
   console.log('VVV CHECKING GLOBAL STATE IN CATEGORY MENU COMPONENT VVV');
@@ -20,13 +23,12 @@ function CategoryMenu() {
     categories
   } = commerceState;
   const categoriesREDUX = categories;
-
-
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
 
   useEffect(() => {
+ 
     if (categoryData) {
-  
+ 
       dispatchREDUX(updateCategories(categoryData.categories))
 
       categoryData.categories.forEach(category => {
@@ -49,7 +51,6 @@ function CategoryMenu() {
   };
 
   const setCurrentCategoryBlank = () => {
-
     dispatchREDUX(updateCurrentCategory(''));
   }
 
